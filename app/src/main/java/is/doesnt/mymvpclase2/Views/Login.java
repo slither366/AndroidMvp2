@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import is.doesnt.mymvpclase2.Interfaces.ILoginPresenter;
 import is.doesnt.mymvpclase2.Interfaces.ILoginView;
+import is.doesnt.mymvpclase2.Presenters.LoginPresenterImpl;
 import is.doesnt.mymvpclase2.R;
 
 public class Login extends AppCompatActivity implements ILoginView {
@@ -18,12 +20,23 @@ public class Login extends AppCompatActivity implements ILoginView {
     Button btnLogin;
     ProgressBar progressBar;
 
+    private ILoginPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
         initComponents();
+
+        presenter = new LoginPresenterImpl(this);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validacion(v);
+            }
+        });
     }
 
     private void initComponents() {
@@ -55,6 +68,10 @@ public class Login extends AppCompatActivity implements ILoginView {
 
     @Override
     public void navigateToHome() {
-        //startActivity(new Intent(Login.this, PrincipalMenu.class));
+        startActivity(new Intent(Login.this, PrincipalMenu.class));
+    }
+
+    public void validacion(View v){
+        presenter.validarUsuario(edtEmail.getText().toString(), edtPassword.getText().toString());
     }
 }
